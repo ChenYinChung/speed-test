@@ -14,8 +14,6 @@ apply from: file("${rootDir}/gradle/project.gradle")
 
 subprojects {
     group 'com.parser'
-    version '1.0-SNAPSHOT'
-
     repositories {
         mavenCentral()
     }
@@ -49,6 +47,4 @@ project(':speed-test'){
         compile group: 'org.projectlombok', name: 'lombok', version: '1.18.6'
 
     }
-
-
 }
