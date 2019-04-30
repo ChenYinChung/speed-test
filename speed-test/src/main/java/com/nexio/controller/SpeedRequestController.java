@@ -1,5 +1,6 @@
 package com.nexio.controller;
 
+import com.nexio.model.QueryInfo;
 import com.nexio.service.SpeedRequestService;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -7,6 +8,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.*;
 
 import java.util.List;
+import java.util.Map;
 
 @ControllerAdvice
 @RestController
@@ -31,4 +33,15 @@ public class SpeedRequestController {
         List<String> datas =speedRequestService.request(website,type);
         return datas;
     }
+
+    @RequestMapping(value = "/json", method = RequestMethod.POST)
+    public List<String> json(@RequestBody QueryInfo queryInfo){
+        logger.info("json Website [{}] , [{}]", queryInfo.getWebsite(), queryInfo.getType());
+        List<String> datas =speedRequestService.request(queryInfo.getWebsite(),queryInfo.getType());
+        return datas;
+
+    }
+
 }
+
+
