@@ -20,4 +20,4 @@ run in command mode , needs install gradle 4.7 version above
  
  health check cli 'till server response Connection refused 
  * curl -X GET http://localhost:8080/actuator/health
-    curl: (7) Failed to connect to localhost port 8080: Connection refused
+ * curl: (7) Failed to connect to localhost port 8080: Connection refused
