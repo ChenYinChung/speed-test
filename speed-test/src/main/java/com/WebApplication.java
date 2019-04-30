@@ -8,16 +8,18 @@ import org.springframework.context.annotation.ComponentScan;
 import org.springframework.context.annotation.PropertySource;
 
 @SpringBootApplication
-@ComponentScan(basePackages = { "com.nexio" })
-@PropertySource({"application.properties","undertow.properties"})
+@ComponentScan(basePackages = {"com.nexio"})
+@PropertySource({"application.properties", "undertow.properties"})
 public class WebApplication {
 
     protected final Logger logger = LoggerFactory.getLogger(this.getClass());
 
-    public static void main(String args[]){
+    public static void main(String args[]) {
         //執行SpringApplication
         SpringApplication.run(WebApplication.class, args);
 
     }
+
+
 
 }

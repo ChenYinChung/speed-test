@@ -40,6 +40,8 @@ public class WSClient {
                 webSocketAdapter.setDone(true);
                 throw new Exception("Login in 17ce timeout over 10 sec");
             }
+
+            sleep(1000);
         }
     }
 
@@ -54,8 +56,6 @@ public class WSClient {
                 break;
             }
 
-            Thread.sleep(1000);
-
             long end = System.currentTimeMillis()/1000;
 
             if(end - begin > 60){
@@ -63,10 +63,19 @@ public class WSClient {
                 throw new Exception("Login in 17ce timeout over 60 sec fetch data");
             }
 
+            sleep(1000);
         }
     }
 
     public  void disconnect(){
         webSocket.disconnect();
+    }
+
+    private void sleep(long t){
+        try{
+            Thread.sleep(t);
+        }catch(Exception e){
+            // do nothing
+        }
     }
 }

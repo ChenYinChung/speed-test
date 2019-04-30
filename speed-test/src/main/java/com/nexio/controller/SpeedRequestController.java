@@ -27,7 +27,7 @@ public class SpeedRequestController {
     @RequestMapping(value = "/post", method = RequestMethod.POST)
     public List<String> postWebsite(@RequestParam(value = "website", required = true) String website,
                               @RequestParam(value = "type", required = true) String type) {
-        logger.info("postWebsite {} , {}", website, type);
+        logger.info("postWebsite [{}] , [{}]", website, type);
         List<String> datas =speedRequestService.request(website,type);
         return datas;
     }

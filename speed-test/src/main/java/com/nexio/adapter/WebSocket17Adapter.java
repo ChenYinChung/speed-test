@@ -1,7 +1,9 @@
 package com.nexio.adapter;
 
+import com.google.gson.Gson;
 import com.neovisionaries.ws.client.WebSocket;
 import com.neovisionaries.ws.client.WebSocketAdapter;
+import com.nexio.model.getresp.newdata.NewData;
 import com.nexio.ws.WSClient;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -13,10 +15,10 @@ public class WebSocket17Adapter extends WebSocketAdapter {
 
     protected final Logger logger = LoggerFactory.getLogger(this.getClass());
 
-    String LOGIN_OK="login ok";
-    String TASK_ACCEPT="TaskAccept";
-    String NEW_DATA="NewData";
-    String END_TASK="TaskEnd";
+    String LOGIN_OK = "login ok";
+    String TASK_ACCEPT = "TaskAccept";
+    String NEW_DATA = "NewData";
+    String END_TASK = "TaskEnd";
     boolean login;
     boolean done;
 
@@ -25,18 +27,25 @@ public class WebSocket17Adapter extends WebSocketAdapter {
     List<String> end = new ArrayList<>();
 
     public void onTextMessage(WebSocket websocket, String message) {
-        if(message.contains(LOGIN_OK)){
+        if (message.contains(LOGIN_OK)) {
             login = true;
-        }else if(message.contains(TASK_ACCEPT)){
-            accept.add(message);
-        }else if(message.contains(NEW_DATA)){
-            logger.info("new data message from wss[{}]",message);
-            datas.add(message);
-        }else if(message.contains(END_TASK)){
-            logger.info("Task end message from wss[{}]",message);
-            end.add(message);
+        } else if (message.contains(TASK_ACCEPT)) {
+            logger.info("Task Accept");
+
+        } else if (message.contains(NEW_DATA)) {
+            Gson gson = new Gson();
+            NewData newData = gson.fromJson(message, NewData.class);
+            double totalTime = Double.parseDouble(newData.getData().getTotalTime());
+
+            // over 2 sec
+            if (totalTime >= 2) {
+                logger.info("------------------- totoal time [{}] [{}]", totalTime,message);
+                datas.add(message);
+            }
+        } else if (message.contains(END_TASK)) {
+            logger.info("Task End");
             done = true;
-        }else{
+        } else {
             done = true;
         }
     }
