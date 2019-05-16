@@ -2,7 +2,7 @@
  測試17ce 網站
 
 ## Requirements
-JDK 8 above
+JDK 11
 
 
 ## Spring boot framework integrate 3rd tools
@@ -10,7 +10,7 @@ JDK 8 above
 run in command mode , needs install gradle 4.7 version above 
 
      
- * java -jar speed-test.jar -Xmx3550m -Xms3550m -Xmn2g -Xss128k -XX:+UseParallelGC  -XX:MaxGCPauseMillis=100 -XX:+UseAdaptiveSizePolicy
+ * java -XX:MetaspaceSize=128m -XX:MaxMetaspaceSize=128m -Xms6g -Xmx6g -Xmn256m -Xss256k -XX:SurvivorRatio=8 -XX:+UseConcMarkSweepGC -XX:+PrintGCDetails -jar speed-test.jar
  
  
 ## undertow graceful shotdown cli
