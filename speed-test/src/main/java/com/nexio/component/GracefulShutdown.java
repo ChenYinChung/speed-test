@@ -2,6 +2,8 @@ package com.nexio.component;
 
 import io.undertow.Undertow;
 import io.undertow.server.ConnectorStatistics;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.web.embedded.undertow.UndertowServletWebServer;
 import org.springframework.boot.web.servlet.context.ServletWebServerApplicationContext;
@@ -17,6 +19,8 @@ import java.util.List;
  */
 @Component
 public class GracefulShutdown implements ApplicationListener<ContextClosedEvent> {
+    protected final Logger logger = LoggerFactory.getLogger(this.getClass());
+
     @Autowired
     private GracefulShutdownWrapper gracefulShutdownWrapper;
     @Autowired
@@ -25,18 +29,11 @@ public class GracefulShutdown implements ApplicationListener<ContextClosedEvent>
     @Override
     public void onApplicationEvent(ContextClosedEvent contextClosedEvent) {
         gracefulShutdownWrapper.getGracefulShutdownHandler().shutdown();
+        logger.info("Server graceful shutdown now");
         try {
-            UndertowServletWebServer webServer = (UndertowServletWebServer) context.getWebServer();
-            Field field = webServer.getClass().getDeclaredField("undertow");
-            field.setAccessible(true);
-            Undertow undertow = (Undertow) field.get(webServer);
-            List<Undertow.ListenerInfo> listenerInfo = undertow.getListenerInfo();
-            Undertow.ListenerInfo listener = listenerInfo.get(0);
-            ConnectorStatistics connectorStatistics = listener.getConnectorStatistics();
-            while (connectorStatistics.getActiveConnections() > 0) {
-                Thread.sleep(1000);
-            }
-        } catch (Exception e) {                // Application Shutdown
+            gracefulShutdownWrapper.getGracefulShutdownHandler().awaitShutdown();
+        } catch (InterruptedException e) {
+            logger.error("Server graceful shutdown failure",e);
         }
     }
 }
